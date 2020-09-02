@@ -1,0 +1,54 @@
+package util.test;
+
+import java.util.concurrent.Semaphore;
+
+/**
+ * @author liu ping
+ * @date 2020/9/2 3:06 下午
+ */
+public class SemaphoreTest {
+
+
+    public static void main(String[] args) {
+        PrintSample printSample = new PrintSample();
+
+        new Thread(() -> printSample.first()).start();
+        new Thread(() -> printSample.second()).start();
+        new Thread(() -> printSample.third()).start();
+
+    }
+
+    /**
+     * 一开始 信号量为0，知道调用了release之后 产生了一个可用的信号量 second可以获得信号量，否则为0的时候是不能获的。
+     * 利用这一点，用release来产生信号量，控制输出顺序
+     */
+    public static class PrintSample {
+        private Semaphore semaphore1 = new Semaphore(0);
+        private Semaphore semaphore2 = new Semaphore(0);
+
+        public void first() {
+            System.out.println("first");
+            semaphore1.release();
+        }
+
+        public void second() {
+            try {
+                semaphore1.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("second");
+            semaphore2.release();
+        }
+
+        public void third() {
+            try {
+                semaphore2.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("third");
+        }
+    }
+
+}
