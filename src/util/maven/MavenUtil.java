@@ -12,22 +12,19 @@ import java.nio.file.Paths;
  * @Date 2019/7/23 13:40
  * @Version 1.0
  */
-public class MavenUtil
-{
+public class MavenUtil {
 
-    private static int delFileCount     = 0;
+    private static int delFileCount = 0;
     private static int needDelFileCount = 0;
-    private static int fileCount        = 0;
-    private static int dirCount         = 0;
-    private static int delDirCount      = 0;
+    private static int fileCount = 0;
+    private static int dirCount = 0;
+    private static int delDirCount = 0;
 
-    private MavenUtil()
-    {
+    private MavenUtil() {
     }
 
-    public static void main(String[] args) throws IOException
-    {
-        delLastUpdateFile("D:\\maven\\repository");
+    public static void main(String[] args) throws IOException {
+        delLastUpdateFile("C:\\Users\\apple\\.m2\\repository");
     }
 
     /**
@@ -35,58 +32,45 @@ public class MavenUtil
      *
      * @param mavenPath
      */
-    public static void delLastUpdateFile(String mavenPath) throws IOException
-    {
+    public static void delLastUpdateFile(String mavenPath) throws IOException {
         File root = new File(mavenPath);
-        if (root.isDirectory())
-        {
+        if (root.isDirectory()) {
             delFileOfDir(root);
         }
-        System.out.println(fileCount);
-        System.out.println(dirCount);
-        System.out.println(needDelFileCount);
-        System.out.println(delFileCount);
-        System.out.println(delDirCount);
+        System.out.println("total file count:" + fileCount);
+        System.out.println("total dir count:" + dirCount);
+        System.out.println("file need to del count:" + needDelFileCount);
+        System.out.println("del file count:" + delFileCount);
+        System.out.println("del dir count:" + delDirCount);
     }
 
-    private static void delFileOfDir(File dir) throws IOException
-    {
-        String fileSuffix  = ".lastUpdated";
+    private static void delFileOfDir(File dir) throws IOException {
+        String fileSuffix = ".lastUpdated";
         String fileSuffix1 = ".sha1___";
-        File[] files       = dir.listFiles();
-        if (files == null)
-        {
+        File[] files = dir.listFiles();
+        if (files == null) {
             return;
         }
-        for (File file : files)
-        {
-            if (file.isDirectory())
-            {
+        for (File file : files) {
+            if (file.isDirectory()) {
                 dirCount++;
-                if ("unknown".equals(file.getName()))
-                {
+                if ("unknown".equals(file.getName())) {
                     delDirCount++;
                     delDir(file);
 
-                }
-                else
-                {
+                } else {
                     delFileOfDir(file);
                 }
-            }
-            else
-            {
+            } else {
                 fileCount++;
                 if (file.getName()
                         .endsWith(fileSuffix) || file.getName()
-                                                     .endsWith(fileSuffix1))
-                {
+                        .endsWith(fileSuffix1)) {
                     needDelFileCount++;
                     Path path = Paths.get(file.toURI());
                     // 如果没有权限删除会报错，但是调用File.delete()的话是不会报错的
                     boolean delete = Files.deleteIfExists(path);
-                    if (delete)
-                    {
+                    if (delete) {
                         delFileCount++;
                     }
                 }
@@ -94,17 +78,12 @@ public class MavenUtil
         }
     }
 
-    private static void delDir(File file)
-    {
+    private static void delDir(File file) {
         File[] files = file.listFiles();
-        for (File f : files)
-        {
-            if (f.isDirectory())
-            {
+        for (File f : files) {
+            if (f.isDirectory()) {
                 delDir(f);
-            }
-            else
-            {
+            } else {
                 f.delete();
             }
         }
