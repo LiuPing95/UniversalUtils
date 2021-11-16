@@ -1,4 +1,4 @@
-package util.test;
+package test;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;

@@ -13,11 +13,11 @@ public class CPUTest {
 
     public static void main(String[] args) {
         newThread();
-        newThread();
-        newThread();
-        newThread();
-        newThread();
-        newThread();
+//        newThread();
+//        newThread();
+//        newThread();
+//        newThread();
+//        newThread();
     }
 
     public static void newThread(){

@@ -1,4 +1,4 @@
-package util.test;
+package test;
 
 import java.util.concurrent.Semaphore;
 
@@ -12,10 +12,43 @@ public class SemaphoreTest {
     public static void main(String[] args) {
         PrintSample printSample = new PrintSample();
 
-        new Thread(() -> printSample.first()).start();
-        new Thread(() -> printSample.second()).start();
-        new Thread(() -> printSample.third()).start();
+//        new Thread(() -> printSample.first()).start();
+//        new Thread(() -> printSample.second()).start();
+//        new Thread(() -> printSample.third()).start();
 
+        FooBarPrint fooBarPrint = new FooBarPrint();
+        int i = 10;
+        new Thread(() -> {
+            for (int i1 = 0; i1 < i; i1++) {
+                fooBarPrint.foo();
+            }
+        }).start();
+        new Thread(() -> {
+            for (int i1 = 0; i1 < i; i1++) {
+                fooBarPrint.bar();
+            }
+        }).start();
+
+    }
+
+    public static class FooBarPrint {
+        private Semaphore semaphore1 = new Semaphore(0);
+        private Semaphore semaphore2 = new Semaphore(0);
+
+        public void foo() {
+            System.out.print("Foo");
+            semaphore1.release();
+        }
+
+        public void bar() {
+            try {
+                semaphore1.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Bar");
+            semaphore1.release();
+        }
     }
 
     /**

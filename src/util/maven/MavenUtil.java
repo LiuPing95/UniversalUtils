@@ -24,7 +24,7 @@ public class MavenUtil {
     }
 
     public static void main(String[] args) throws IOException {
-        delLastUpdateFile("C:\\Users\\apple\\.m2\\repository");
+        delLastUpdateFile("/Users/liuping/.m2/repository");
     }
 
     /**
@@ -37,24 +37,33 @@ public class MavenUtil {
         if (root.isDirectory()) {
             delFileOfDir(root);
         }
-        System.out.println("total file count:" + fileCount);
-        System.out.println("total dir count:" + dirCount);
-        System.out.println("file need to del count:" + needDelFileCount);
-        System.out.println("del file count:" + delFileCount);
-        System.out.println("del dir count:" + delDirCount);
+        System.out.println("fileCount\t\t\t:\t" + fileCount);
+        System.out.println("dirCount\t\t\t:\t" + dirCount);
+        System.out.println("needDelFileCount\t:\t" + needDelFileCount);
+        System.out.println("delFileCount\t\t:\t" + delFileCount);
+        System.out.println("delDirCount\t\t\t:\t" + delDirCount);
     }
 
     private static void delFileOfDir(File dir) throws IOException {
-        String fileSuffix = ".lastUpdated";
-        String fileSuffix1 = ".sha1___";
+        String fileSuffix1 = ".lastUpdated";
+        String fileSuffix2 = ".sha1___";
+        String fileSuffix3 = "unknown";
         File[] files = dir.listFiles();
         if (files == null) {
             return;
         }
+        if (files.length == 0) {
+            boolean delete = Files.deleteIfExists(Paths.get(dir.toURI()));
+            if (delete) {
+                delDirCount++;
+            }
+            return;
+        }
         for (File file : files) {
+            String fileName = file.getName();
             if (file.isDirectory()) {
                 dirCount++;
-                if ("unknown".equals(file.getName())) {
+                if ("unknown".equals(fileName) || "error".equals(fileName)) {
                     delDirCount++;
                     delDir(file);
 
@@ -63,9 +72,9 @@ public class MavenUtil {
                 }
             } else {
                 fileCount++;
-                if (file.getName()
-                        .endsWith(fileSuffix) || file.getName()
-                        .endsWith(fileSuffix1)) {
+                if (fileName.endsWith(fileSuffix1)
+                        || fileName.endsWith(fileSuffix2)
+                        || fileName.contains(fileSuffix3)) {
                     needDelFileCount++;
                     Path path = Paths.get(file.toURI());
                     // 如果没有权限删除会报错，但是调用File.delete()的话是不会报错的

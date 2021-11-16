@@ -9,20 +9,36 @@ import java.util.List;
  * @Date 2019/8/22 9:18
  * @Version 1.0
  */
-public class ListTest
-{
+public class ListTest {
 
-    public static void main(String[] args)
-    {
+    public static Integer num = 0;
 
-        List<Integer> list = new ArrayList<>();
-        while (list.size() < 10) {
-            list.add(1);
-        }
-        list.add(5,5);
-        for (Integer integer : list)
-        {
-            System.out.println(integer);
-        }
+    public static void main(String[] args) {
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("t1:"+num);
+            num = 1;
+
+        }).start();
+
+
+        new Thread(() -> {
+            num = 2;
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("t2:"+num);
+        }).start();
+
+
+
     }
 }
