@@ -16,24 +16,21 @@ public class ReentrantLockTest {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 String name = Thread.currentThread().getName();
-                if (lock.tryLock()) {
-                    System.out.println("thread:"+ name+"获得了锁");
+                while (!lock.tryLock()) {
                     try {
                         Thread.sleep(1000L);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    System.out.println("thread:"+ name+"没有获得锁");
-                    return;
                 }
+                    System.out.println("thread:"+ name+"获得了锁");
                 try {
-
-                } catch (Exception e) {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                } finally {
-                    lock.unlock();
                 }
+
+                lock.unlock();
 
             }).start();
         }

@@ -15,7 +15,7 @@ public class EnumSwitchTest {
 
 
     public static void main(String[] args) {
-        System.out.println(String.format("平台最多支持同时激活%s个村庄！", 50));
+        System.out.printf("平台最多支持同时激活%s个村庄！%n", 50);
         /*TestEnum testEnum = TestEnum.B;
         switch (testEnum) {
             case A:

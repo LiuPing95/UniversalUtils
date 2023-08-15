@@ -16,8 +16,11 @@ public class ThreadPoolTest {
         BlockingQueue<Runnable> blockingQueue = new MyBlockQueue();
 
         RejectedExecutionHandler rejectedExecutionHandler = new MyRejectPolicyHandler();
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 10, 1L, TimeUnit.SECONDS,
-                blockingQueue, new MyThreadFactory(), rejectedExecutionHandler);
+        ThreadPoolExecutor threadPoolExecutor =
+                new ThreadPoolExecutor(1,
+                        10,
+                        1L, TimeUnit.SECONDS,
+                        blockingQueue, new MyThreadFactory(), rejectedExecutionHandler);
 
         for (int i = 0; i < 20; i++) {
             threadPoolExecutor.execute(new ThreadTestTask(ThreadPoolTest.i++));

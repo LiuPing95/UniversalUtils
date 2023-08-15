@@ -12,22 +12,22 @@ public class SemaphoreTest {
     public static void main(String[] args) {
         PrintSample printSample = new PrintSample();
 
-//        new Thread(() -> printSample.first()).start();
-//        new Thread(() -> printSample.second()).start();
-//        new Thread(() -> printSample.third()).start();
+        new Thread(() -> printSample.first()).start();
+        new Thread(() -> printSample.second()).start();
+        new Thread(() -> printSample.third()).start();
 
-        FooBarPrint fooBarPrint = new FooBarPrint();
-        int i = 10;
-        new Thread(() -> {
-            for (int i1 = 0; i1 < i; i1++) {
-                fooBarPrint.foo();
-            }
-        }).start();
-        new Thread(() -> {
-            for (int i1 = 0; i1 < i; i1++) {
-                fooBarPrint.bar();
-            }
-        }).start();
+//        FooBarPrint fooBarPrint = new FooBarPrint();
+//        int i = 10;
+//        new Thread(() -> {
+//            for (int i1 = 0; i1 < i; i1++) {
+//                fooBarPrint.foo();
+//            }
+//        }).start();
+//        new Thread(() -> {
+//            for (int i1 = 0; i1 < i; i1++) {
+//                fooBarPrint.bar();
+//            }
+//        }).start();
 
     }
 
